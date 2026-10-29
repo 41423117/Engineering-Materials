@@ -1,0 +1,882 @@
+<!DOCTYPE html>
+<html lang="zh-TW" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>工程材料 期中考試卷 - 線上測驗與學習平台</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- MathJax for rendering engineering formulas -->
+    <script>
+        MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']]
+            },
+            svg: {
+                fontCache: 'global'
+            }
+        };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Noto+Sans+TC:wght@300;400;500;600;700;900&display=swap');
+        
+        body {
+            font-family: 'Noto Sans TC', 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+            background-color: #0f172a;
+            color: #334155;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* Glassmorphism & Modern UI Effects */
+        .glass-nav {
+            background: rgba(15, 23, 42, 0.85);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .glass-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(226, 232, 240, 0.8);
+        }
+
+        .hero-gradient {
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #0f172a 100%);
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #0f172a;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #334155;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #475569;
+        }
+
+        /* Choice Card Styling */
+        .option-label {
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .option-label:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+        }
+
+        /* Print styles for converting to paper layout */
+        @media print {
+            .no-print {
+                display: none !important;
+            }
+            body {
+                background-color: #ffffff !important;
+                color: #000000 !important;
+                font-size: 10pt;
+            }
+            .print-container {
+                max-width: 100% !important;
+                margin: 0 !important;
+                padding: 0 !important;
+            }
+            .paper-card {
+                border: 1px solid #e2e8f0 !important;
+                box-shadow: none !important;
+                padding: 1rem !important;
+                margin-bottom: 1rem !important;
+                page-break-inside: avoid;
+                background: #ffffff !important;
+            }
+            .paper-header {
+                border-bottom: 2px solid #000 !important;
+                margin-bottom: 1.5rem !important;
+                padding-bottom: 0.5rem !important;
+                background: transparent !important;
+                color: #000 !important;
+            }
+            .show-on-print {
+                display: block !important;
+            }
+            .solution-box {
+                display: none !important;
+            }
+        }
+
+        .show-on-print {
+            display: none;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col antialiased selection:bg-indigo-500 selection:text-white">
+
+    <!-- Top Navigation Bar -->
+    <header class="no-print glass-nav text-white sticky top-0 z-50 transition-all duration-300">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 py-3 flex flex-wrap justify-between items-center gap-4">
+            <div class="flex items-center space-x-3.5">
+                <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-indigo-500 to-blue-600 flex items-center justify-center shadow-lg shadow-indigo-500/30">
+                    <i class="fa-solid fa-atom text-white text-xl"></i>
+                </div>
+                <div>
+                    <h1 class="font-bold text-base sm:text-lg tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-white via-slate-200 to-slate-400">工程材料 期中考試系統</h1>
+                    <p class="text-[11px] text-slate-400 font-medium">機械與材料工程學系 數位學習平台</p>
+                </div>
+            </div>
+
+            <!-- Quick Navigation & Actions -->
+            <div class="flex items-center space-x-2 sm:space-x-3">
+                <div class="hidden lg:flex bg-slate-800/80 backdrop-blur-md border border-slate-700/50 rounded-xl p-1 text-xs font-medium">
+                    <button onclick="scrollToSection('part1')" class="px-3.5 py-1.5 rounded-lg text-slate-300 hover:text-white hover:bg-slate-700/60 transition">第一部分 (1~20)</button>
+                    <button onclick="scrollToSection('part2')" class="px-3.5 py-1.5 rounded-lg text-slate-300 hover:text-white hover:bg-slate-700/60 transition">第二部分 (21~24)</button>
+                    <button onclick="scrollToSection('part3')" class="px-3.5 py-1.5 rounded-lg text-slate-300 hover:text-white hover:bg-slate-700/60 transition">第三部分 (25~26)</button>
+                </div>
+
+                <button onclick="window.print()" class="bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 px-3.5 py-1.5 rounded-xl text-xs font-semibold flex items-center gap-2 transition shadow-sm">
+                    <i class="fa-solid fa-print text-indigo-400"></i>
+                    <span>列印 / PDF</span>
+                </button>
+
+                <button id="submitBtn" onclick="submitExam()" class="bg-gradient-to-r from-indigo-600 to-blue-600 hover:from-indigo-500 hover:to-blue-500 text-white px-4 py-1.5 rounded-xl text-xs font-bold flex items-center gap-2 shadow-lg shadow-indigo-600/30 transition transform hover:-translate-y-0.5">
+                    <i class="fa-solid fa-paper-plane text-xs"></i>
+                    <span>提交測驗</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Score Bar / Sticky Progress Tracker -->
+    <div class="no-print bg-slate-900/90 backdrop-blur-md border-b border-slate-800/80 px-4 py-2.5 sticky top-[57px] z-40 text-slate-300 shadow-md">
+        <div class="max-w-6xl mx-auto flex items-center justify-between text-xs sm:text-sm">
+            <div class="flex items-center gap-4">
+                <span class="font-medium text-slate-400">答題進度: <strong id="progressText" class="text-indigo-400 font-bold text-sm">0</strong> / 26 題</span>
+                <div class="w-32 sm:w-48 bg-slate-800 rounded-full h-2 overflow-hidden border border-slate-700/50 p-0.5">
+                    <div id="progressBar" class="bg-gradient-to-r from-indigo-500 to-blue-500 h-full rounded-full transition-all duration-300 shadow-sm" style="width: 0%"></div>
+                </div>
+            </div>
+            <div id="scoreDisplay" class="hidden font-semibold text-slate-300 flex items-center gap-2 bg-indigo-950/60 border border-indigo-800/50 px-3 py-1 rounded-lg">
+                <span>選擇題得分：</span>
+                <span id="scoreValue" class="text-emerald-400 text-base sm:text-lg font-bold font-mono">--</span>
+                <span class="text-slate-400 text-xs">/ 80 分</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content Container -->
+    <main class="flex-grow max-w-5xl w-full mx-auto p-4 sm:p-6 lg:p-8 print-container">
+
+        <!-- Exam Paper Header Section -->
+        <div class="paper-header glass-card rounded-2xl shadow-xl shadow-slate-950/20 border border-slate-200/80 p-6 sm:p-8 mb-8 relative overflow-hidden">
+            <div class="absolute top-0 right-0 w-64 h-64 bg-gradient-to-br from-indigo-500/10 to-blue-500/5 rounded-full blur-3xl pointer-events-none"></div>
+
+            <div class="text-center border-b border-slate-200/80 pb-6 mb-6">
+                <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-indigo-50 text-indigo-700 text-xs font-semibold mb-3 border border-indigo-100">
+                    <i class="fa-solid fa-book-bookmark text-indigo-500"></i>
+                    <span>指定教材：Callister's Materials Science and Engineering, 10/e (Abridged Version)</span>
+                </div>
+                <h1 class="text-2xl sm:text-4xl font-extrabold text-slate-900 tracking-tight mb-2">工程材料 期中考試卷</h1>
+                <p class="text-xs sm:text-sm text-slate-500 font-medium">機械設計系 專業核心課程評量試卷</p>
+            </div>
+
+            <!-- Student Info Inputs (Interactive & Printable) -->
+            <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-6 text-xs sm:text-sm">
+                <div class="bg-slate-50/80 p-3 rounded-xl border border-slate-200/60">
+                    <label class="block text-slate-500 font-medium mb-1">系所</label>
+                    <input type="text" value="機械設計系" class="w-full bg-transparent font-semibold text-slate-800 focus:outline-none">
+                </div>
+                <div class="bg-slate-50/80 p-3 rounded-xl border border-slate-200/60">
+                    <label class="block text-slate-500 font-medium mb-1">班級</label>
+                    <input type="text" placeholder="請輸入班級" class="w-full bg-transparent font-semibold text-slate-800 focus:outline-none placeholder:text-slate-400">
+                </div>
+                <div class="bg-slate-50/80 p-3 rounded-xl border border-slate-200/60">
+                    <label class="block text-slate-500 font-medium mb-1">學號</label>
+                    <input type="text" placeholder="請輸入學號" class="w-full bg-transparent font-semibold text-slate-800 focus:outline-none placeholder:text-slate-400">
+                </div>
+                <div class="bg-slate-50/80 p-3 rounded-xl border border-slate-200/60">
+                    <label class="block text-slate-500 font-medium mb-1">姓名</label>
+                    <input type="text" placeholder="請輸入姓名" class="w-full bg-transparent font-semibold text-slate-800 focus:outline-none placeholder:text-slate-400">
+                </div>
+            </div>
+
+            <!-- Exam Notice Box -->
+            <div class="bg-gradient-to-r from-amber-50/90 to-orange-50/90 border border-amber-200/80 rounded-xl p-4 text-xs text-amber-900 shadow-sm">
+                <p class="font-bold flex items-center gap-2 text-amber-800 text-sm mb-1.5">
+                    <i class="fa-solid fa-shield-halved text-amber-600"></i> 考試須知與評分說明
+                </p>
+                <ul class="grid grid-cols-1 md:grid-cols-2 gap-1.5 text-slate-700 pl-1">
+                    <li class="flex items-center gap-1.5"><i class="fa-regular fa-clock text-amber-600"></i> 考試時間：90分鐘｜總分：100分</li>
+                    <li class="flex items-center gap-1.5"><i class="fa-solid fa-calculator text-amber-600"></i> 開卷考試，許可使用工程計算機</li>
+                    <li class="flex items-center gap-1.5"><i class="fa-solid fa-list-check text-amber-600"></i> 選擇題均為單選題，每題僅有一個最佳答案</li>
+                    <li class="flex items-center gap-1.5"><i class="fa-solid fa-square-root-variable text-amber-600"></i> 工程常數採 $e$，必要時 $\pi = 3.1416$</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- SECTION 1: Concept Multiple Choice -->
+        <section id="part1" class="mb-10 scroll-mt-28">
+            <div class="bg-gradient-to-r from-slate-900 via-indigo-950 to-slate-900 text-white px-5 py-4 rounded-2xl shadow-lg border border-slate-800 mb-6 flex justify-between items-center">
+                <div class="flex items-center gap-3">
+                    <div class="w-8 h-8 rounded-lg bg-indigo-500/20 border border-indigo-400/30 flex items-center justify-center text-indigo-400 font-bold text-sm">
+                        I
+                    </div>
+                    <div>
+                        <h2 class="font-bold text-base sm:text-lg tracking-tight">第一部分：觀念與應用單選題</h2>
+                        <p class="text-xs text-slate-400">共 20 題，每題 3 分，合計 60 分</p>
+                    </div>
+                </div>
+                <span class="bg-indigo-500/10 border border-indigo-500/30 text-indigo-300 text-xs px-3 py-1 rounded-full font-mono font-medium">Q01 - Q20</span>
+            </div>
+
+            <div id="part1Container" class="space-y-4">
+                <!-- Dynamically populated -->
+            </div>
+        </section>
+
+        <!-- SECTION 2: Calculation Multiple Choice -->
+        <section id="part2" class="mb-10 scroll-mt-28">
+            <div class="bg-gradient-to-r from-slate-900 via-blue-950 to-slate-900 text-white px-5 py-4 rounded-2xl shadow-lg border border-slate-800 mb-6 flex justify-between items-center">
+                <div class="flex items-center gap-3">
+                    <div class="w-8 h-8 rounded-lg bg-blue-500/20 border border-blue-400/30 flex items-center justify-center text-blue-400 font-bold text-sm">
+                        II
+                    </div>
+                    <div>
+                        <h2 class="font-bold text-base sm:text-lg tracking-tight">第二部分：計算型單選題</h2>
+                        <p class="text-xs text-slate-400">共 4 題，每題 5 分，合計 20 分</p>
+                    </div>
+                </div>
+                <span class="bg-blue-500/10 border border-blue-500/30 text-blue-300 text-xs px-3 py-1 rounded-full font-mono font-medium">Q21 - Q24</span>
+            </div>
+
+            <div id="part2Container" class="space-y-4">
+                <!-- Dynamically populated -->
+            </div>
+        </section>
+
+        <!-- SECTION 3: Open Calculations -->
+        <section id="part3" class="mb-12 scroll-mt-28">
+            <div class="bg-gradient-to-r from-slate-900 via-purple-950 to-slate-900 text-white px-5 py-4 rounded-2xl shadow-lg border border-slate-800 mb-6 flex justify-between items-center">
+                <div class="flex items-center gap-3">
+                    <div class="w-8 h-8 rounded-lg bg-purple-500/20 border border-purple-400/30 flex items-center justify-center text-purple-400 font-bold text-sm">
+                        III
+                    </div>
+                    <div>
+                        <h2 class="font-bold text-base sm:text-lg tracking-tight">第三部分：綜合計算題</h2>
+                        <p class="text-xs text-slate-400">共 2 題，每題 10 分，合計 20 分（需列出完整計算過程）</p>
+                    </div>
+                </div>
+                <span class="bg-purple-500/10 border border-purple-500/30 text-purple-300 text-xs px-3 py-1 rounded-full font-mono font-medium">Q25 - Q26</span>
+            </div>
+
+            <div id="part3Container" class="space-y-4">
+                <!-- Dynamically populated -->
+            </div>
+        </section>
+
+        <!-- Bottom Action Bar -->
+        <div class="no-print glass-card p-8 rounded-2xl text-center shadow-xl mb-12 border border-slate-200/80 relative overflow-hidden">
+            <div class="max-w-xl mx-auto">
+                <div class="w-12 h-12 rounded-full bg-indigo-50 border border-indigo-100 flex items-center justify-center text-indigo-600 text-xl mx-auto mb-3">
+                    <i class="fa-solid fa-check-double"></i>
+                </div>
+                <h3 class="font-bold text-slate-900 text-lg mb-1">完成所有試題解答？</h3>
+                <p class="text-xs sm:text-sm text-slate-500 mb-6 leading-relaxed">請仔細檢查各題答題狀況。點擊下方按鈕提交後，系統將自動核對答案並顯示詳細的觀念與計算題解解析。</p>
+                <button onclick="submitExam()" class="bg-gradient-to-r from-indigo-600 via-blue-600 to-indigo-700 hover:from-indigo-500 hover:to-blue-500 text-white px-8 py-3 rounded-xl font-bold text-sm shadow-xl shadow-indigo-600/25 transition transform hover:-translate-y-0.5 flex items-center gap-2.5 mx-auto">
+                    <i class="fa-solid fa-circle-check"></i>
+                    <span>提交答案並對照解析</span>
+                </button>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="no-print bg-slate-950 text-slate-400 py-8 text-center text-xs border-t border-slate-800/80">
+        <div class="max-w-5xl mx-auto px-4 space-y-2">
+            <p class="font-medium text-slate-300">《材料科學與工程導論 基礎篇》Callister 10/e 課程配套線上考試系統</p>
+            <p class="text-slate-500">國立虎尾科技大學 機械設計工程系 授課教材考卷系統</p>
+        </div>
+    </footer>
+
+    <!-- JavaScript Data & Logic -->
+    <script>
+        // Exam Data Store
+        const part1Questions = [
+            {
+                id: 1,
+                title: "為傳動軸選材時，下列哪一項最符合材料科學與工程設計的思考？",
+                options: [
+                    "(A) 只依外觀顏色選擇",
+                    "(B) 同時評估負荷型態、強度、加工與成本",
+                    "(C) 只依熔點選擇",
+                    "(D) 只依原子序選擇"
+                ],
+                answer: 1, // B
+                answerLetter: "B",
+                explain: "材料選擇需全盤考量機械受力型態、機械強度性質、製造加工可行性以及經濟成本。"
+            },
+            {
+                id: 2,
+                title: "金屬與典型離子固體相比，金屬可延展加工的重要微觀原因之一為何？",
+                options: [
+                    "(A) 金屬較不具方向性，容許原子層滑移",
+                    "(B) 金屬沒有原子",
+                    "(C) 離子固體都具有大量自由電子",
+                    "(D) 金屬必然沒有晶體缺陷"
+                ],
+                answer: 0, // A
+                answerLetter: "A",
+                explain: "金屬鍵屬於非方向性鍵結，滑移面受力錯動時不會產生同性電荷相斥的破裂情況，故具有優良延展性。"
+            },
+            {
+                id: 3,
+                title: "若兩種材料的原子間作用力曲線在平衡距離附近斜率差異明顯，較可能直接反映在哪項性質？",
+                options: [
+                    "(A) 彈性模數",
+                    "(B) 外觀色彩",
+                    "(C) 試片長度",
+                    "(D) 材料名稱"
+                ],
+                answer: 0, // A
+                answerLetter: "A",
+                explain: "原子間作用力-距離曲線在平衡點處的斜率 $\\left(\\frac{dF}{dr}\\right)$ 與材料的楊氏彈性模數 $E$ 成正比。"
+            },
+            {
+                id: 4,
+                title: "BCC 晶體單位晶胞中相當於幾個原子？",
+                options: [
+                    "(A) 1",
+                    "(B) 2",
+                    "(C) 4",
+                    "(D) 6"
+                ],
+                answer: 1, // B
+                answerLetter: "B",
+                explain: "體心立方 (BCC) 晶胞原子數包含：8 個頂點原子 $\\times 1/8 + 1$ 個體心原子 $= 2$ 個原子。"
+            },
+            {
+                id: 5,
+                title: "理想 FCC 金屬的原子堆積因子 APF 最接近何值？",
+                options: [
+                    "(A) 0.52",
+                    "(B) 0.68",
+                    "(C) 0.74",
+                    "(D) 1.00"
+                ],
+                answer: 2, // C
+                answerLetter: "C",
+                explain: "面心立方 (FCC) 與密排六方 (HCP) 結構為最緊密堆積，其原子堆積因子 (APF) 為 0.74。"
+            },
+            {
+                id: 6,
+                title: "某晶面與 $x$ 軸平行、與 $y$ 軸在 $b$ 處相交、與 $z$ 軸在 $c$ 處相交，米勒指數為何？",
+                options: [
+                    "(A) (110)",
+                    "(B) (011)",
+                    "(C) (101)",
+                    "(D) (111)"
+                ],
+                answer: 1, // B
+                answerLetter: "B",
+                explain: "截距為 $(\\infty, 1, 1)$，取倒數為 $(1/\\infty, 1/1, 1/1) = (0, 1, 1)$，米勒指數即為 (011)。"
+            },
+            {
+                id: 7,
+                title: "單晶材料可能具有明顯異向性，最合理的說明為何？",
+                options: [
+                    "(A) 不同晶向原子排列及鍵結幾何不同",
+                    "(B) 晶體中完全沒有原子",
+                    "(C) 單晶沒有固定晶格",
+                    "(D) 所有晶向原子間距必然相同"
+                ],
+                answer: 0, // A
+                answerLetter: "A",
+                explain: "單晶材料在不同結晶方向上的原子密度與間距不同，導致物理與力學性質隨結晶方向改變。"
+            },
+            {
+                id: 8,
+                title: "若一金屬片由室溫升至較高溫度並達平衡，通常其空位數目會如何變化？",
+                options: [
+                    "(A) 增加",
+                    "(B) 減少",
+                    "(C) 不定不變",
+                    "(D) 只與試片顏色相關"
+                ],
+                answer: 0, // A
+                answerLetter: "A",
+                explain: "平衡熱空位濃度公式為 $N_v = N \\exp(-Q_v / k T)$，溫度 $T$ 升高時，平衡空位數目呈指數型增加。"
+            },
+            {
+                id: 9,
+                title: "小尺寸溶質原子進入母材原子之間的間隙位置，稱為何種固溶體？",
+                options: [
+                    "(A) 置換式",
+                    "(B) 填隙式",
+                    "(C) 非晶式",
+                    "(D) 多晶式"
+                ],
+                answer: 1, // B
+                answerLetter: "B",
+                explain: "當溶質原子半徑顯著小於母材原子時，會填入晶格間隙，形成填隙式（間隙式）固溶體。"
+            },
+            {
+                id: 10,
+                title: "穩態擴散中，若板厚與 $D$ 固定而兩側濃度差變三倍，通量絕對值如何變化？",
+                options: [
+                    "(A) 變三倍",
+                    "(B) 變 $1/3$",
+                    "(C) 不變",
+                    "(D) 變九倍"
+                ],
+                answer: 0, // A
+                answerLetter: "A",
+                explain: "根據 Fick 第一定律 $J = -D \\frac{dC}{dx}$，擴散通量與濃度梯度成正比，濃度差變為 3 倍，通量 $J$ 亦變為 3 倍。"
+            },
+            {
+                id: 11,
+                title: "比較同種材料在兩種溫度下的擴散速率，哪個參數通常最直接反映溫度效應？",
+                options: [
+                    "(A) 擴散係數 $D$",
+                    "(B) 試片名稱",
+                    "(C) 原子序的奇偶",
+                    "(D) 載重方向"
+                ],
+                answer: 0, // A
+                answerLetter: "A",
+                explain: "擴散係數 $D = D_0 \\exp(-Q_d / RT)$ 直接決定擴散速率，隨溫度升高呈指數型劇增。"
+            },
+            {
+                id: 12,
+                title: "某金屬表面進行滲入處理，濃度分布隨處理時間持續改變，屬於何種擴散？",
+                options: [
+                    "(A) 非穩態擴散",
+                    "(B) 完全穩態擴散",
+                    "(C) 無擴散",
+                    "(D) 只與剪應力有關"
+                ],
+                answer: 0, // A
+                answerLetter: "A",
+                explain: "濃度隨時間與位置改變 $(\\partial C / \\partial t \\neq 0)$ 屬於非穩態擴散，需使用 Fick 第二定律分析。"
+            },
+            {
+                id: 13,
+                title: "若拉伸過程截面縮小，真實應力與工程應力的主要差別為何？",
+                options: [
+                    "(A) 真實應力採用瞬時截面積",
+                    "(B) 工程應力採用瞬時截面積",
+                    "(C) 兩者都只採用試片側面積",
+                    "(D) 真實應力不考慮負荷"
+                ],
+                answer: 0, // A
+                answerLetter: "A",
+                explain: "真實應力 $\\sigma_T = F / A_i$（採用瞬時截面積），而工程應力 $\\sigma = F / A_0$（採用原始截面積）。"
+            },
+            {
+                id: 14,
+                title: "$0.2\\%$ 偏移法主要用於估計哪一項性質？",
+                options: [
+                    "(A) 抗拉強度",
+                    "(B) 降伏強度",
+                    "(C) 斷裂後伸長率",
+                    "(D) 晶粒尺寸"
+                ],
+                answer: 1, // B
+                answerLetter: "B",
+                explain: "對於沒有明顯降伏點的金屬材料，通常劃一條平行於彈性段且在應變軸偏移 $0.002$ ($0.2\\%$) 的平行線來定義降伏強度。"
+            },
+            {
+                id: 15,
+                title: "等向性材料若剪力模數 $G$ 固定，蒲松比 $\\nu$ 增加時，彈性模數 $E$ 如何變化？",
+                options: [
+                    "(A) 下降",
+                    "(B) 上升",
+                    "(C) 不變",
+                    "(D) 必為零"
+                ],
+                answer: 1, // B
+                answerLetter: "B",
+                explain: "彈性常數關係式為 $E = 2G(1 + \\nu)$。當 $G$ 固定而 $\\nu$ 增加時，$E$ 也會隨之上升。"
+            },
+            {
+                id: 16,
+                title: "已加工硬化的延性金屬若需恢復較佳延性，較適合考慮哪項處理？",
+                options: [
+                    "(A) 適當退火",
+                    "(B) 繼續增加冷加工量",
+                    "(C) 增加試片長度",
+                    "(D) 只改變外觀塗色"
+                ],
+                answer: 0, // A
+                answerLetter: "A",
+                explain: "退火處理包含回復、再結晶與晶粒成長階段，能消除內部殘留應力，降低強度並大幅恢復塑性與延展性。"
+            },
+            {
+                id: 17,
+                title: "依 Hall-Petch 關係，晶粒平均尺寸下降時，降伏強度通常如何改變？",
+                options: [
+                    "(A) 上升",
+                    "(B) 下降",
+                    "(C) 固定為零",
+                    "(D) 完全不受影響"
+                ],
+                answer: 0, // A
+                answerLetter: "A",
+                explain: "Hall-Petch 公式 $\\sigma_y = \\sigma_0 + k_y d^{-1/2}$。當晶粒直徑 $d$ 越小，晶界阻礙差排運動的效益越高，降伏強度顯著上升。"
+            },
+            {
+                id: 18,
+                title: "下列何者最符合固溶強化作用機制？",
+                options: [
+                    "(A) 溶質引起局部應變場並阻礙差排",
+                    "(B) 完全移除晶界",
+                    "(C) 使金屬成為真空",
+                    "(D) 只改變試片質量不改變滑移阻力"
+                ],
+                answer: 0, // A
+                answerLetter: "A",
+                explain: "加入溶質原子會造成晶格畸變，產生晶格應變場，此應變場與差排的應變場交互作用，進而阻礙差排移動。"
+            },
+            {
+                id: 19,
+                title: "機械零件經過大量週期重複後突然裂製，即使最大應力不高，應優先檢討何者？",
+                options: [
+                    "(A) 疲勞破損",
+                    "(B) 只考慮密度",
+                    "(C) 只考慮熔點",
+                    "(D) 只考慮材料顏色"
+                ],
+                answer: 0, // A
+                answerLetter: "A",
+                explain: "在反覆循環應力作用下，材料於低於降伏強度的應力水準下發生的脆性突發斷裂稱為疲勞破壞。"
+            },
+            {
+                id: 20,
+                title: "在比較鋼與鋁合金的 $S-N$ 曲線時，何者最合理？",
+                options: [
+                    "(A) 所有鋁合金均有明確疲勞限",
+                    "(B) 疲勞壽命與應力振幅無關",
+                    "(C) 部分鋼材具有疲勞限，而許多鋁合金沒有明確疲勞限",
+                    "(D) 應力振幅越高，疲勞壽命必然越長"
+                ],
+                answer: 2, // C
+                answerLetter: "C",
+                explain: "大多數鐵系金屬存在明確的疲勞極限（低於此應力永不破壞），而鋁、銅等非鐵金屬則沒有疲勞極限，其疲勞強度隨循環次數增加持續下降。"
+            }
+        ];
+
+        const part2Questions = [
+            {
+                id: 21,
+                title: "BCC 金屬原子半徑 $r = 0.124\\text{ nm}$，晶格常數 $a$ 最接近何值？",
+                options: [
+                    "(A) $0.215\\text{ nm}$",
+                    "(B) $0.286\\text{ nm}$",
+                    "(C) $0.351\\text{ nm}$",
+                    "(D) $0.496\\text{ nm}$"
+                ],
+                answer: 1, // B
+                answerLetter: "B",
+                explain: "BCC 體對角線原子相切：$\\sqrt{3}a = 4r \\implies a = \\frac{4r}{\\sqrt{3}} = \\frac{4 \\times 0.124}{\\sqrt{3}} \\approx 0.2864\\text{ nm}$。"
+            },
+            {
+                id: 22,
+                title: "某板 $D = 3.0 \\times 10^{-11}\\text{ m}^2/\\text{s}$，厚度 $L = 3.0\\text{ mm}$，兩側濃度差 $|\\Delta C| = 400\\text{ mol}/\\text{m}^3$，穩態通量絕對值為何？",
+                options: [
+                    "(A) $4.0 \\times 10^{-6}$",
+                    "(B) $4.0 \\times 10^{-8}$",
+                    "(C) $1.2 \\times 10^{-6}$",
+                    "(D) $9.0 \\times 10^{-8}$"
+                ],
+                answer: 0, // A
+                answerLetter: "A",
+                explain: "$L = 3.0 \\times 10^{-3}\\text{ m}$，依據 Fick 第一定律：$J = D \\frac{|\\Delta C|}{\\Delta x} = 3.0 \\times 10^{-11} \\times \\frac{400}{3.0 \\times 10^{-3}} = 4.0 \\times 10^{-6}\\text{ mol/}(\\text{m}^2 \\cdot \\text{s})$。"
+            },
+            {
+                id: 23,
+                title: "圓桿原始截面積 $80\\text{ mm}^2$，承受軸向拉力 $12\\text{ kN}$，工程應力為何？",
+                options: [
+                    "(A) $15\\text{ MPa}$",
+                    "(B) $96\\text{ MPa}$",
+                    "(C) $150\\text{ MPa}$",
+                    "(D) $960\\text{ MPa}$"
+                ],
+                answer: 2, // C
+                answerLetter: "C",
+                explain: "拉力 $F = 12000\\text{ N}$，工程應力 $\\sigma = \\frac{F}{A_0} = \\frac{12000\\text{ N}}{80\\text{ mm}^2} = 150\\text{ N/mm}^2 = 150\\text{ MPa}$。"
+            },
+            {
+                id: 24,
+                title: "循環應力最大值 $220\\text{ MPa}$、最小值 $60\\text{ MPa}$，平均應力為何？",
+                options: [
+                    "(A) $60\\text{ MPa}$",
+                    "(B) $80\\text{ MPa}$",
+                    "(C) $140\\text{ MPa}$",
+                    "(D) $160\\text{ MPa}$"
+                ],
+                answer: 2, // C
+                answerLetter: "C",
+                explain: "平均應力公式：$\\sigma_m = \\frac{\\sigma_{\\max} + \\sigma_{\\min}}{2} = \\frac{220 + 60}{2} = 140\\text{ MPa}$。"
+            }
+        ];
+
+        const part3Questions = [
+            {
+                id: 25,
+                title: "某鋁合金棒長 $L = 300\\text{ mm}$、截面積 $A = 150\\text{ mm}^2$、彈性模數 $E = 70\\text{ GPa}$，承受軸向拉力 $F = 10.5\\text{ kN}$。假設仍在完全性範圍，<br>(a) 求工程應力（4分）；(b) 求工程應變（3分）；(c) 求伸長量（3分）。",
+                isTextAnswer: true,
+                points: 10,
+                solution: "【標準演算解答】<br>" +
+                          "**(a) 工程應力 $\\sigma$：**<br>" +
+                          "$$\\sigma = \\frac{F}{A} = \\frac{10.5 \\times 10^3\\text{ N}}{150\\text{ mm}^2} = \\mathbf{70\\text{ MPa}}$$<br>" +
+                          "**(b) 工程應變 $\\epsilon$：**<br>" +
+                          "$$\\epsilon = \\frac{\\sigma}{E} = \\frac{70\\text{ MPa}}{70000\\text{ MPa}} = \\mathbf{0.001\\text{ (或 } 1.0 \\times 10^{-3}\\text{)}}$$<br>" +
+                          "**(c) 伸長量 $\\Delta L$：**<br>" +
+                          "$$\\Delta L = \\epsilon \\cdot L = 0.001 \\times 300\\text{ mm} = \\mathbf{0.3\\text{ mm}}$$"
+            },
+            {
+                id: 26,
+                title: "圓形金屬線原始直徑 $d_0 = 10\\text{ mm}$，經冷拉後直徑 $d_f = 8\\text{ mm}$。<br>(a) 求冷加工百分比 $\%\\text{CW}$（6分）；(b) 若再冷拉 $\\dots\\text{mm}$，與第一次加工相比，$\\%\\text{CW}$ 增加或減少？說明所採用的原始面積基準（4分）。",
+                isTextAnswer: true,
+                points: 10,
+                solution: "【標準演算解答】<br>" +
+                          "**(a) 冷加工百分比 $\%\\text{CW}$：**<br>" +
+                          "$$A_0 = \\frac{\\pi}{4}(10)^2 = 25\\pi\\text{ mm}^2, \\quad A_f = \\frac{\\pi}{4}(8)^2 = 16\\pi\\text{ mm}^2$$<br>" +
+                          "$$\\%\\text{CW} = \\frac{A_0 - A_f}{A_0} \\times 100\\% = \\frac{25\\pi - 16\\pi}{25\\pi} \\times 100\\% = \\mathbf{36\\%}$$<br>" +
+                          "**(b) 續拉後的累積冷加工量與基準說明：**<br>" +
+                          "1. 若繼續冷拉使得直徑進一步縮小，總累積變形量增加，故 $\%\\text{CW}$ 會**增加**。<br>" +
+                          "2. 計算累積冷加工率時，永遠必須**以第一次拉拔前最原始的總截面積 $A_0$**（即 $d_0 = 10\\text{ mm}$）作為分母基準。"
+            }
+        ];
+
+        // Store User Answers
+        const userAnswers = {};
+
+        // Render Functions
+        function renderPart1() {
+            const container = document.getElementById('part1Container');
+            container.innerHTML = part1Questions.map(q => `
+                <div class="paper-card glass-card rounded-2xl p-5 sm:p-6 shadow-sm hover:shadow-md transition duration-200 border border-slate-200/80 relative" id="q-box-${q.id}">
+                    <div class="flex items-start justify-between gap-4 mb-4">
+                        <div class="flex items-start gap-3">
+                            <span class="inline-flex items-center justify-center bg-indigo-100 text-indigo-700 font-bold font-mono text-xs px-2.5 py-1 rounded-lg border border-indigo-200/60 shrink-0 mt-0.5">
+                                Q${q.id < 10 ? '0' + q.id : q.id}
+                            </span>
+                            <h3 class="font-semibold text-slate-900 text-sm sm:text-base leading-snug">
+                                ${q.title}
+                            </h3>
+                        </div>
+                        <div class="flex items-center gap-2 shrink-0">
+                            <span class="inline-flex items-center bg-indigo-50 text-indigo-700 text-xs font-bold px-2.5 py-1 rounded-lg border border-indigo-100">
+                                【答案：${q.answerLetter}】
+                            </span>
+                            <span class="text-xs font-semibold text-slate-400">3分</span>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5 mt-2">
+                        ${q.options.map((opt, oIdx) => `
+                            <label onclick="selectOption(${q.id}, ${oIdx})" class="option-label option-btn-${q.id} flex items-center p-3 rounded-xl border border-slate-200/80 bg-slate-50/50 hover:bg-indigo-50/50 hover:border-indigo-200 cursor-pointer text-xs sm:text-sm text-slate-700 font-medium transition">
+                                <input type="radio" name="q_${q.id}" value="${oIdx}" class="w-4 h-4 text-indigo-600 focus:ring-indigo-500 border-slate-300 mr-3">
+                                <span>${opt}</span>
+                            </label>
+                        `).join('')}
+                    </div>
+
+                    <div id="explain-${q.id}" class="solution-box hidden mt-4 p-4 bg-indigo-50/60 border border-indigo-100 rounded-xl text-xs text-indigo-950 leading-relaxed">
+                        <p class="font-bold text-indigo-900 mb-1 flex items-center gap-1.5">
+                            <i class="fa-solid fa-circle-info text-indigo-600"></i> 解析與說明：
+                        </p>
+                        <p>${q.explain}</p>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function renderPart2() {
+            const container = document.getElementById('part2Container');
+            container.innerHTML = part2Questions.map(q => `
+                <div class="paper-card glass-card rounded-2xl p-5 sm:p-6 shadow-sm hover:shadow-md transition duration-200 border border-slate-200/80 relative" id="q-box-${q.id}">
+                    <div class="flex items-start justify-between gap-4 mb-4">
+                        <div class="flex items-start gap-3">
+                            <span class="inline-flex items-center justify-center bg-blue-100 text-blue-700 font-bold font-mono text-xs px-2.5 py-1 rounded-lg border border-blue-200/60 shrink-0 mt-0.5">
+                                Q${q.id}
+                            </span>
+                            <h3 class="font-semibold text-slate-900 text-sm sm:text-base leading-snug">
+                                ${q.title}
+                            </h3>
+                        </div>
+                        <div class="flex items-center gap-2 shrink-0">
+                            <span class="inline-flex items-center bg-blue-50 text-blue-700 text-xs font-bold px-2.5 py-1 rounded-lg border border-blue-100">
+                                【答案：${q.answerLetter}】
+                            </span>
+                            <span class="text-xs font-semibold text-slate-400">5分</span>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5 mt-2">
+                        ${q.options.map((opt, oIdx) => `
+                            <label onclick="selectOption(${q.id}, ${oIdx})" class="option-label option-btn-${q.id} flex items-center p-3 rounded-xl border border-slate-200/80 bg-slate-50/50 hover:bg-blue-50/50 hover:border-blue-200 cursor-pointer text-xs sm:text-sm text-slate-700 font-medium transition">
+                                <input type="radio" name="q_${q.id}" value="${oIdx}" class="w-4 h-4 text-blue-600 focus:ring-blue-500 border-slate-300 mr-3">
+                                <span>${opt}</span>
+                            </label>
+                        `).join('')}
+                    </div>
+
+                    <div id="explain-${q.id}" class="solution-box hidden mt-4 p-4 bg-blue-50/60 border border-blue-100 rounded-xl text-xs text-blue-950 leading-relaxed">
+                        <p class="font-bold text-blue-900 mb-1 flex items-center gap-1.5">
+                            <i class="fa-solid fa-calculator text-blue-600"></i> 計算解析：
+                        </p>
+                        <p>${q.explain}</p>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function renderPart3() {
+            const container = document.getElementById('part3Container');
+            container.innerHTML = part3Questions.map(q => `
+                <div class="paper-card glass-card rounded-2xl p-5 sm:p-6 shadow-sm transition duration-200 border border-slate-200/80 relative" id="q-box-${q.id}">
+                    <div class="flex items-start justify-between gap-4 mb-4">
+                        <div class="flex items-start gap-3">
+                            <span class="inline-flex items-center justify-center bg-purple-100 text-purple-700 font-bold font-mono text-xs px-2.5 py-1 rounded-lg border border-purple-200/60 shrink-0 mt-0.5">
+                                Q${q.id}
+                            </span>
+                            <h3 class="font-semibold text-slate-900 text-sm sm:text-base leading-relaxed">
+                                ${q.title}
+                            </h3>
+                        </div>
+                        <span class="text-xs font-semibold text-slate-400 shrink-0">${q.points}分</span>
+                    </div>
+
+                    <div class="mt-3">
+                        <textarea oninput="recordTextAnswer(${q.id}, this.value)" rows="4" placeholder="請在此填寫演算過程與最終答案..." class="no-print w-full bg-slate-50/80 border border-slate-200/90 rounded-xl p-3.5 text-xs sm:text-sm text-slate-800 focus:bg-white focus:outline-none focus:ring-2 focus:ring-purple-500/30 focus:border-purple-500 transition placeholder:text-slate-400"></textarea>
+                        
+                        <div class="show-on-print border border-slate-300 rounded-xl p-4 h-36 text-xs text-slate-400">
+                            【請在此處列出完整計算過程與答案】
+                        </div>
+                    </div>
+
+                    <div class="mt-3 flex justify-end no-print">
+                        <button onclick="toggleSolution(${q.id})" class="text-xs text-purple-600 hover:text-purple-800 font-semibold flex items-center gap-1.5 px-3 py-1.5 rounded-lg hover:bg-purple-50 transition">
+                            <i class="fa-solid fa-file-invoice text-purple-500"></i> 展開 / 隱藏標準解答
+                        </button>
+                    </div>
+
+                    <div id="explain-${q.id}" class="solution-box hidden mt-3 p-4 bg-purple-50/60 border border-purple-100 rounded-xl text-xs text-purple-950 leading-relaxed space-y-1">
+                        ${q.solution}
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Event Handlers
+        function selectOption(qId, optionIdx) {
+            userAnswers[qId] = optionIdx;
+            updateProgress();
+        }
+
+        function recordTextAnswer(qId, text) {
+            if (text.trim().length > 0) {
+                userAnswers[qId] = text;
+            } else {
+                delete userAnswers[qId];
+            }
+            updateProgress();
+        }
+
+        function updateProgress() {
+            const answeredCount = Object.keys(userAnswers).length;
+            document.getElementById('progressText').innerText = answeredCount;
+            const percentage = Math.round((answeredCount / 26) * 100);
+            document.getElementById('progressBar').style.width = percentage + '%';
+        }
+
+        function toggleSolution(qId) {
+            const box = document.getElementById(`explain-${qId}`);
+            if (box) {
+                box.classList.toggle('hidden');
+            }
+        }
+
+        // Submit & Grading
+        function submitExam() {
+            let score = 0;
+
+            // Grade Part 1
+            part1Questions.forEach(q => {
+                const userChoice = userAnswers[q.id];
+                const card = document.getElementById(`q-box-${q.id}`);
+                const explainBox = document.getElementById(`explain-${q.id}`);
+                
+                if (explainBox) explainBox.classList.remove('hidden');
+
+                if (userChoice !== undefined && userChoice === q.answer) {
+                    score += 3;
+                    card.classList.add('border-emerald-400', 'bg-emerald-50/20');
+                } else if (userChoice !== undefined) {
+                    card.classList.add('border-rose-300', 'bg-rose-50/20');
+                }
+            });
+
+            // Grade Part 2
+            part2Questions.forEach(q => {
+                const userChoice = userAnswers[q.id];
+                const card = document.getElementById(`q-box-${q.id}`);
+                const explainBox = document.getElementById(`explain-${q.id}`);
+                
+                if (explainBox) explainBox.classList.remove('hidden');
+
+                if (userChoice !== undefined && userChoice === q.answer) {
+                    score += 5;
+                    card.classList.add('border-emerald-400', 'bg-emerald-50/20');
+                } else if (userChoice !== undefined) {
+                    card.classList.add('border-rose-300', 'bg-rose-50/20');
+                }
+            });
+
+            // Show Part 3 Solutions
+            part3Questions.forEach(q => {
+                const explainBox = document.getElementById(`explain-${q.id}`);
+                if (explainBox) explainBox.classList.remove('hidden');
+            });
+
+            // Display Score Summary
+            const scoreDisplay = document.getElementById('scoreDisplay');
+            const scoreValue = document.getElementById('scoreValue');
+            scoreDisplay.classList.remove('hidden');
+            scoreValue.innerText = score;
+
+            // Smooth Scroll to Top
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+
+            // Re-render MathJax formulas
+            if (window.MathJax) {
+                MathJax.typesetPromise();
+            }
+        }
+
+        function scrollToSection(sectionId) {
+            const el = document.getElementById(sectionId);
+            if (el) {
+                el.scrollIntoView({ behavior: 'smooth' });
+            }
+        }
+
+        // Initialize Page
+        window.onload = function() {
+            renderPart1();
+            renderPart2();
+            renderPart3();
+
+            if (window.MathJax) {
+                MathJax.typesetPromise();
+            }
+        };
+    </script>
+</body>
+</html>
